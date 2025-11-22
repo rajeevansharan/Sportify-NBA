@@ -1,98 +1,95 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
-
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+// app/(tabs)/index.tsx
+import React, { useEffect } from 'react';
+import { View, FlatList, StyleSheet, Text, RefreshControl, SafeAreaView } from 'react-native';
+import { useAppDispatch, useAppSelector } from '@/src/redux/store';
+import { fetchUpcomingMatches } from '@/src/redux/slices/matchesSlice';
+import MatchCard from '@/src/components/MatchCard';
+import LoadingSpinner from '@/src/components/LoadingSpinner';
+import { useTheme } from '@/src/contexts/ThemeContext';
+import { Feather } from '@expo/vector-icons';
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+  const dispatch = useAppDispatch();
+  const { matches, status, error } = useAppSelector((state) => state.matches);
+  const { colors } = useTheme();
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+  useEffect(() => {
+    // Fetch data only on initial load or if failed
+    if (status === 'idle') {
+      dispatch(fetchUpcomingMatches());
+    }
+  }, [status, dispatch]);
+
+  const onRefresh = () => {
+    dispatch(fetchUpcomingMatches());
+  };
+
+  const renderContent = () => {
+    if (status === 'loading' && matches.length === 0) {
+      return <LoadingSpinner message="Fetching NBA fixtures..." />;
+    }
+
+    if (error && matches.length === 0) {
+      return (
+        <View style={styles.emptyContainer}>
+          <Feather name="alert-triangle" size={40} color={colors.error} />
+          <Text style={[styles.errorText, { color: colors.error }]}>Error: {error}</Text>
+          <Text style={{ color: colors.textMuted, textAlign: 'center' }}>
+            Could not load matches. Please check your network or try refreshing.
+          </Text>
+        </View>
+      );
+    }
+
+    if (matches.length === 0 && status === 'succeeded') {
+      return (
+        <View style={styles.emptyContainer}>
+          <Feather name="frown" size={40} color={colors.textMuted} />
+          <Text style={[styles.errorText, { color: colors.text }]}>No Upcoming Matches Found</Text>
+          <Text style={{ color: colors.textMuted }}>
+            The NBA schedule may not be available at this moment.
+          </Text>
+        </View>
+      );
+    }
+
+    return (
+      <FlatList
+        data={matches}
+        keyExtractor={(item) => item.idEvent}
+        renderItem={({ item }) => <MatchCard match={item} />}
+        contentContainerStyle={{ paddingVertical: 10 }}
+        refreshControl={
+          <RefreshControl
+            refreshing={status === 'loading'}
+            onRefresh={onRefresh}
+            tintColor={colors.primary}
+          />
+        }
+      />
+    );
+  };
+
+  return (
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+      {renderContent()}
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
+  container: {
+    flex: 1,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
-    gap: 8,
+    padding: 20,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  errorText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginVertical: 10,
   },
 });
