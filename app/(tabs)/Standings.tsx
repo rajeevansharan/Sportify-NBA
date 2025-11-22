@@ -10,12 +10,14 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   RefreshControl,
+  Alert,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useTheme } from '@/src/contexts/ThemeContext';
+import { sportsService, TeamStanding } from '@/src/services/sportsService';
 
-// Sample team data structure - replace with your API data
-interface Team {
+// Processed team data for display
+interface ProcessedTeam {
   rank: number;
   name: string;
   wins: number;
@@ -23,41 +25,68 @@ interface Team {
   winPercentage: number;
   gamesBack: number;
   streak: string;
-  conference: 'Eastern' | 'Western';
+  form: string;
+  teamBadge: string;
 }
-
-// Mock data - Replace this with actual API call
-const generateMockData = (): Team[] => [
-  { rank: 1, name: 'Boston Celtics', wins: 45, losses: 12, winPercentage: 0.789, gamesBack: 0, streak: 'W5', conference: 'Eastern' },
-  { rank: 2, name: 'Milwaukee Bucks', wins: 42, losses: 15, winPercentage: 0.737, gamesBack: 3, streak: 'W2', conference: 'Eastern' },
-  { rank: 3, name: 'Philadelphia 76ers', wins: 40, losses: 17, winPercentage: 0.702, gamesBack: 5, streak: 'L1', conference: 'Eastern' },
-  { rank: 4, name: 'Cleveland Cavaliers', wins: 38, losses: 19, winPercentage: 0.667, gamesBack: 7, streak: 'W3', conference: 'Eastern' },
-  { rank: 5, name: 'Miami Heat', wins: 35, losses: 22, winPercentage: 0.614, gamesBack: 10, streak: 'W1', conference: 'Eastern' },
-  { rank: 1, name: 'Denver Nuggets', wins: 44, losses: 13, winPercentage: 0.772, gamesBack: 0, streak: 'W7', conference: 'Western' },
-  { rank: 2, name: 'Phoenix Suns', wins: 41, losses: 16, winPercentage: 0.719, gamesBack: 3, streak: 'W4', conference: 'Western' },
-  { rank: 3, name: 'LA Lakers', wins: 38, losses: 19, winPercentage: 0.667, gamesBack: 6, streak: 'L2', conference: 'Western' },
-  { rank: 4, name: 'Sacramento Kings', wins: 37, losses: 20, winPercentage: 0.649, gamesBack: 7, streak: 'W1', conference: 'Western' },
-  { rank: 5, name: 'Golden State Warriors', wins: 35, losses: 22, winPercentage: 0.614, gamesBack: 9, streak: 'L1', conference: 'Western' },
-];
 
 export default function StandingsScreen() {
   const { colors } = useTheme();
-  const [selectedConference, setSelectedConference] = useState<'Eastern' | 'Western'>('Eastern');
-  const [teams, setTeams] = useState<Team[]>([]);
+  const [teams, setTeams] = useState<ProcessedTeam[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [season, setSeason] = useState('2024-2025');
+
+  const processStandings = (standings: TeamStanding[]): ProcessedTeam[] => {
+    // Sort by wins (descending)
+    const sorted = [...standings].sort((a, b) => parseInt(b.intWin) - parseInt(a.intWin));
+    
+    const topWins = parseInt(sorted[0]?.intWin || '0');
+    
+    return sorted.map((team, index) => {
+      const wins = parseInt(team.intWin || '0');
+      const losses = parseInt(team.intLoss || '0');
+      const totalGames = wins + losses;
+      const winPercentage = totalGames > 0 ? wins / totalGames : 0;
+      const gamesBack = (topWins - wins);
+      
+      // Parse form (e.g., "WLWWL") to get streak
+      const form = team.strForm || '';
+      let streak = '';
+      if (form.length > 0) {
+        const lastResult = form[form.length - 1];
+        let count = 1;
+        for (let i = form.length - 2; i >= 0; i--) {
+          if (form[i] === lastResult) count++;
+          else break;
+        }
+        streak = `${lastResult}${count}`;
+      }
+
+      return {
+        rank: index + 1,
+        name: team.strTeam,
+        wins,
+        losses,
+        winPercentage,
+        gamesBack,
+        streak: streak || 'N/A',
+        form: team.strForm || '',
+        teamBadge: team.strTeamBadge || '',
+      };
+    });
+  };
 
   const fetchStandings = async () => {
     try {
-      // TODO: Replace with actual API call
-      // const response = await sportsService.getStandings();
-      // setTeams(response);
-      
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setTeams(generateMockData());
-    } catch (error) {
-      console.error('Error fetching standings:', error);
+      setError(null);
+      const standings = await sportsService.getStandings(season);
+      const processed = processStandings(standings);
+      setTeams(processed);
+    } catch (err: any) {
+      console.error('Error fetching standings:', err);
+      setError(err.message || 'Failed to load standings');
+      Alert.alert('Error', err.message || 'Failed to load standings');
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -66,63 +95,35 @@ export default function StandingsScreen() {
 
   useEffect(() => {
     fetchStandings();
-  }, []);
+  }, [season]);
 
   const onRefresh = () => {
     setRefreshing(true);
     fetchStandings();
   };
 
-  const filteredTeams = teams.filter(team => team.conference === selectedConference);
-
   const renderHeader = () => (
     <View style={styles.headerContainer}>
       <View style={styles.headerContent}>
         <View>
           <Text style={[styles.headerTitle, { color: colors.text }]}>
-            NBA Standings
+            NBA Teams
           </Text>
           <Text style={[styles.headerSubtitle, { color: colors.textMuted }]}>
-            2024-25 Regular Season
+            {season} Season Rankings
           </Text>
         </View>
         <View style={[styles.iconBadge, { backgroundColor: colors.primary }]}>
           <Text style={styles.iconBadgeText}>🏆</Text>
         </View>
       </View>
-
-      {/* Conference Selector */}
-      <View style={[styles.conferenceSelector, { backgroundColor: colors.card, borderColor: colors.border }]}>
-        <TouchableOpacity
-          style={[
-            styles.conferenceButton,
-            selectedConference === 'Eastern' && { backgroundColor: colors.primary }
-          ]}
-          onPress={() => setSelectedConference('Eastern')}
-          activeOpacity={0.8}
-        >
-          <Text style={[
-            styles.conferenceButtonText,
-            { color: selectedConference === 'Eastern' ? '#FFFFFF' : colors.text }
-          ]}>
-            Eastern
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.conferenceButton,
-            selectedConference === 'Western' && { backgroundColor: colors.primary }
-          ]}
-          onPress={() => setSelectedConference('Western')}
-          activeOpacity={0.8}
-        >
-          <Text style={[
-            styles.conferenceButtonText,
-            { color: selectedConference === 'Western' ? '#FFFFFF' : colors.text }
-          ]}>
-            Western
-          </Text>
-        </TouchableOpacity>
+      
+      {/* Info Banner */}
+      <View style={[styles.infoBanner, { backgroundColor: `${colors.primary}15`, borderColor: `${colors.primary}40` }]}>
+        <Feather name="info" size={16} color={colors.primary} style={{ marginRight: 8 }} />
+        <Text style={[styles.infoBannerText, { color: colors.primary }]}>
+          Showing NBA teams with simulated standings data
+        </Text>
       </View>
     </View>
   );
@@ -139,16 +140,17 @@ export default function StandingsScreen() {
     </View>
   );
 
-  const renderTeamRow = (team: Team, index: number) => {
+  const renderTeamRow = (team: ProcessedTeam, index: number) => {
     const isTopThree = team.rank <= 3;
+    const isWinStreak = team.streak.startsWith('W');
     
     return (
       <TouchableOpacity
-        key={`${team.conference}-${team.rank}`}
+        key={`${team.name}-${team.rank}`}
         style={[
           styles.teamRow,
           { backgroundColor: colors.card, borderColor: colors.border },
-          index === filteredTeams.length - 1 && styles.lastRow
+          index === teams.length - 1 && styles.lastRow
         ]}
         activeOpacity={0.7}
       >
@@ -181,11 +183,11 @@ export default function StandingsScreen() {
         {/* Streak */}
         <View style={[
           styles.streakBadge,
-          { backgroundColor: team.streak.startsWith('W') ? 'rgba(40, 167, 69, 0.12)' : 'rgba(220, 53, 69, 0.12)' }
+          { backgroundColor: isWinStreak ? 'rgba(40, 167, 69, 0.12)' : 'rgba(220, 53, 69, 0.12)' }
         ]}>
           <Text style={[
             styles.streakText,
-            { color: team.streak.startsWith('W') ? '#28a745' : '#DC3545' }
+            { color: isWinStreak ? '#28a745' : '#DC3545' }
           ]}>
             {team.streak}
           </Text>
@@ -212,6 +214,28 @@ export default function StandingsScreen() {
     );
   }
 
+  if (error && teams.length === 0) {
+    return (
+      <SafeAreaView style={[styles.centerContainer, { backgroundColor: colors.background }]}>
+        <View style={styles.errorContent}>
+          <View style={[styles.errorIconContainer, { backgroundColor: 'rgba(220, 53, 69, 0.1)' }]}>
+            <Feather name="alert-circle" size={48} color={colors.error} />
+          </View>
+          <Text style={[styles.errorTitle, { color: colors.text }]}>Unable to Load Standings</Text>
+          <Text style={[styles.errorDescription, { color: colors.textMuted }]}>{error}</Text>
+          <TouchableOpacity 
+            style={[styles.retryButton, { backgroundColor: colors.primary }]}
+            onPress={onRefresh}
+            activeOpacity={0.8}
+          >
+            <Feather name="refresh-cw" size={18} color="#FFFFFF" style={styles.retryIcon} />
+            <Text style={styles.retryButtonText}>Try Again</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <StatusBar barStyle="dark-content" />
@@ -230,7 +254,7 @@ export default function StandingsScreen() {
         
         <View style={styles.tableContainer}>
           {renderTableHeader()}
-          {filteredTeams.map((team, index) => renderTeamRow(team, index))}
+          {teams.map((team, index) => renderTeamRow(team, index))}
         </View>
 
         {/* Info Footer */}
@@ -260,6 +284,45 @@ const styles = StyleSheet.create({
     marginTop: 16,
     fontSize: 16,
     fontWeight: '600',
+  },
+  errorContent: {
+    alignItems: 'center',
+    paddingHorizontal: 40,
+  },
+  errorIconContainer: {
+    width: 96,
+    height: 96,
+    borderRadius: 48,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 24,
+  },
+  errorTitle: {
+    fontSize: 22,
+    fontWeight: '700',
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  errorDescription: {
+    fontSize: 16,
+    textAlign: 'center',
+    lineHeight: 24,
+  },
+  retryButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 14,
+    paddingHorizontal: 28,
+    borderRadius: 12,
+    marginTop: 28,
+  },
+  retryIcon: {
+    marginRight: 8,
+  },
+  retryButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '700',
   },
   headerContainer: {
     paddingHorizontal: 20,
@@ -298,23 +361,18 @@ const styles = StyleSheet.create({
   iconBadgeText: {
     fontSize: 28,
   },
-  conferenceSelector: {
+  infoBanner: {
     flexDirection: 'row',
-    borderRadius: 12,
-    padding: 4,
-    borderWidth: 1,
-  },
-  conferenceButton: {
-    flex: 1,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 10,
     alignItems: 'center',
+    padding: 12,
+    borderRadius: 10,
+    borderWidth: 1,
+    marginTop: 16,
   },
-  conferenceButtonText: {
-    fontSize: 15,
-    fontWeight: '700',
-    letterSpacing: 0.3,
+  infoBannerText: {
+    fontSize: 13,
+    fontWeight: '600',
+    flex: 1,
   },
   tableContainer: {
     paddingHorizontal: 20,
