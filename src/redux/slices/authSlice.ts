@@ -1,7 +1,7 @@
 // src/redux/slices/authSlice.ts
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { authService } from '@/src/services/authService';
 import { User } from '@/src/types';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface AuthState {
   user: User | null;
@@ -33,6 +33,18 @@ export const loginUser = createAsyncThunk(
     try {
       const { token, firstName } = await authService.login(username, password);
       return { token, firstName, username } as User;
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const registerUser = createAsyncThunk(
+  'auth/registerUser',
+  async ({ username, password }: any, { rejectWithValue }) => {
+    try {
+      const user = await authService.register(username, password);
+      return user;
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
@@ -76,6 +88,22 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(loginUser.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload as string;
+        state.user = null;
+      })
+
+      // Register User
+      .addCase(registerUser.pending, (state) => {
+        state.status = 'loading';
+        state.error = null;
+      })
+      .addCase(registerUser.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.status = 'succeeded';
+        state.error = null;
+      })
+      .addCase(registerUser.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload as string;
         state.user = null;

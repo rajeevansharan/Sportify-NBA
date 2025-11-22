@@ -1,6 +1,15 @@
 // app/(tabs)/index.tsx
 import React, { useEffect } from 'react';
-import { View, FlatList, StyleSheet, Text, RefreshControl, SafeAreaView } from 'react-native';
+import { 
+  View, 
+  FlatList, 
+  StyleSheet, 
+  Text, 
+  RefreshControl, 
+  SafeAreaView,
+  StatusBar,
+  TouchableOpacity 
+} from 'react-native';
 import { useAppDispatch, useAppSelector } from '@/src/redux/store';
 import { fetchUpcomingMatches } from '@/src/redux/slices/matchesSlice';
 import MatchCard from '@/src/components/MatchCard';
@@ -14,7 +23,6 @@ export default function HomeScreen() {
   const { colors } = useTheme();
 
   useEffect(() => {
-    // Fetch data only on initial load or if failed
     if (status === 'idle') {
       dispatch(fetchUpcomingMatches());
     }
@@ -24,54 +32,104 @@ export default function HomeScreen() {
     dispatch(fetchUpcomingMatches());
   };
 
+  const renderHeader = () => (
+    <View style={styles.headerContainer}>
+      <View style={styles.headerContent}>
+        <View>
+          <Text style={[styles.headerTitle, { color: colors.text }]}>
+            NBA Fixtures
+          </Text>
+          <Text style={[styles.headerSubtitle, { color: colors.textMuted }]}>
+            {matches.length > 0 
+              ? `${matches.length} upcoming ${matches.length === 1 ? 'match' : 'matches'}`
+              : 'Stay updated with live schedules'}
+          </Text>
+        </View>
+        <View style={[styles.iconBadge, { backgroundColor: colors.primary }]}>
+          <Text style={styles.iconBadgeText}>🏀</Text>
+        </View>
+      </View>
+    </View>
+  );
+
+  const renderEmptyState = (icon: string, title: string, description: string, isError = false) => (
+    <View style={styles.emptyStateContainer}>
+      <View style={[
+        styles.emptyStateIconContainer,
+        { backgroundColor: isError ? 'rgba(220, 53, 69, 0.1)' : 'rgba(128, 128, 128, 0.1)' }
+      ]}>
+        <Feather 
+          name={icon as any} 
+          size={48} 
+          color={isError ? colors.error : colors.textMuted} 
+        />
+      </View>
+      <Text style={[styles.emptyStateTitle, { color: colors.text }]}>
+        {title}
+      </Text>
+      <Text style={[styles.emptyStateDescription, { color: colors.textMuted }]}>
+        {description}
+      </Text>
+      {isError && (
+        <TouchableOpacity 
+          style={[styles.retryButton, { backgroundColor: colors.primary }]}
+          onPress={onRefresh}
+          activeOpacity={0.8}
+        >
+          <Feather name="refresh-cw" size={18} color="#FFFFFF" style={styles.retryIcon} />
+          <Text style={styles.retryButtonText}>Try Again</Text>
+        </TouchableOpacity>
+      )}
+    </View>
+  );
+
   const renderContent = () => {
     if (status === 'loading' && matches.length === 0) {
       return <LoadingSpinner message="Fetching NBA fixtures..." />;
     }
 
     if (error && matches.length === 0) {
-      return (
-        <View style={styles.emptyContainer}>
-          <Feather name="alert-triangle" size={40} color={colors.error} />
-          <Text style={[styles.errorText, { color: colors.error }]}>Error: {error}</Text>
-          <Text style={{ color: colors.textMuted, textAlign: 'center' }}>
-            Could not load matches. Please check your network or try refreshing.
-          </Text>
-        </View>
+      return renderEmptyState(
+        'alert-circle',
+        'Unable to Load Matches',
+        'Please check your internet connection and try again.',
+        true
       );
     }
 
     if (matches.length === 0 && status === 'succeeded') {
-      return (
-        <View style={styles.emptyContainer}>
-          <Feather name="frown" size={40} color={colors.textMuted} />
-          <Text style={[styles.errorText, { color: colors.text }]}>No Upcoming Matches Found</Text>
-          <Text style={{ color: colors.textMuted }}>
-            The NBA schedule may not be available at this moment.
-          </Text>
-        </View>
+      return renderEmptyState(
+        'calendar',
+        'No Upcoming Matches',
+        'The NBA schedule may not be available at this moment. Check back later for updates.'
       );
     }
 
     return (
-      <FlatList
-        data={matches}
-        keyExtractor={(item) => item.idEvent}
-        renderItem={({ item }) => <MatchCard match={item} />}
-        contentContainerStyle={{ paddingVertical: 10 }}
-        refreshControl={
-          <RefreshControl
-            refreshing={status === 'loading'}
-            onRefresh={onRefresh}
-            tintColor={colors.primary}
-          />
-        }
-      />
+      <>
+        {renderHeader()}
+        <FlatList
+          data={matches}
+          keyExtractor={(item) => item.idEvent}
+          renderItem={({ item }) => <MatchCard match={item} />}
+          contentContainerStyle={styles.listContent}
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={status === 'loading'}
+              onRefresh={onRefresh}
+              tintColor={colors.primary}
+              colors={[colors.primary]}
+            />
+          }
+        />
+      </>
     );
   };
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+      <StatusBar barStyle="dark-content" />
       {renderContent()}
     </SafeAreaView>
   );
@@ -81,15 +139,94 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  emptyContainer: {
+  headerContainer: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 16,
+  },
+  headerContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  headerTitle: {
+    fontSize: 28,
+    fontWeight: '800',
+    letterSpacing: -0.5,
+    marginBottom: 4,
+  },
+  headerSubtitle: {
+    fontSize: 15,
+    fontWeight: '500',
+    letterSpacing: 0.1,
+  },
+  iconBadge: {
+    width: 56,
+    height: 56,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  iconBadgeText: {
+    fontSize: 28,
+  },
+  listContent: {
+    paddingHorizontal: 20,
+    paddingBottom: 20,
+  },
+  emptyStateContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+    paddingHorizontal: 40,
   },
-  errorText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginVertical: 10,
+  emptyStateIconContainer: {
+    width: 96,
+    height: 96,
+    borderRadius: 48,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 24,
+  },
+  emptyStateTitle: {
+    fontSize: 22,
+    fontWeight: '700',
+    marginBottom: 12,
+    textAlign: 'center',
+    letterSpacing: -0.3,
+  },
+  emptyStateDescription: {
+    fontSize: 16,
+    fontWeight: '400',
+    textAlign: 'center',
+    lineHeight: 24,
+    maxWidth: 320,
+  },
+  retryButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 14,
+    paddingHorizontal: 28,
+    borderRadius: 12,
+    marginTop: 28,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  retryIcon: {
+    marginRight: 8,
+  },
+  retryButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '700',
+    letterSpacing: 0.3,
   },
 });

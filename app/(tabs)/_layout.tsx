@@ -1,10 +1,21 @@
 // app/(tabs)/_layout.tsx
-import { Tabs } from 'expo-router';
-import { Feather } from '@expo/vector-icons';
-import { useTheme } from '@/src/contexts/ThemeContext';
+import LoadingSpinner from "@/src/components/LoadingSpinner";
+import { useTheme } from "@/src/contexts/ThemeContext";
+import { useAuth } from "@/src/hooks/useAuth";
+import { Feather } from "@expo/vector-icons";
+import { Redirect, Tabs } from "expo-router";
 
 export default function TabLayout() {
   const { colors } = useTheme();
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return <LoadingSpinner message="Checking authentication..." />;
+  }
+
+  if (!user) {
+    return <Redirect href="/auth/login" />;
+  }
 
   return (
     <Tabs
@@ -26,22 +37,28 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Upcoming Matches',
-          tabBarIcon: ({ color }) => <Feather name="calendar" color={color} size={24} />,
+          title: "Upcoming Matches",
+          tabBarIcon: ({ color }) => (
+            <Feather name="calendar" color={color} size={24} />
+          ),
         }}
       />
       <Tabs.Screen
         name="favorites"
         options={{
-          title: 'My Favorites',
-          tabBarIcon: ({ color }) => <Feather name="heart" color={color} size={24} />,
+          title: "My Favorites",
+          tabBarIcon: ({ color }) => (
+            <Feather name="heart" color={color} size={24} />
+          ),
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
-          title: 'Profile',
-          tabBarIcon: ({ color }) => <Feather name="user" color={color} size={24} />,
+          title: "Profile",
+          tabBarIcon: ({ color }) => (
+            <Feather name="user" color={color} size={24} />
+          ),
         }}
       />
     </Tabs>
