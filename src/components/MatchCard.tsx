@@ -1,3 +1,4 @@
+// Feature: Home Screen
 // src/components/MatchCard.tsx
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, GestureResponderEvent } from 'react-native';

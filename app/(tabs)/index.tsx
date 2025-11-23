@@ -1,3 +1,4 @@
+// Feature: Home Screen
 // app/(tabs)/index.tsx
 import React, { useEffect } from 'react';
 import { 
