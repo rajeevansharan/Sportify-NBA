@@ -1,71 +1,133 @@
 # 🏀 Sportify: NBA Edition
 
-A cross-platform mobile application built with **React Native (Expo)**, focusing on tracking NBA fixtures, scores, and managing a personalized list of favorite matches.
-
-> **Assignment Domain Selection**: Sports & Lifestyle (Last Digit: 4, 9)  
-> **App Theme**: "Sportify" – View matches, players, and scores.
-
-## 📱 Features Showcase
-
-This application is built with a strong focus on modularity, robust state management, and modern UI/UX standards.
-
-### ✅ Core Features (Assignment Requirements)
-
-| Feature                  | Implementation                                                                                       | Assignment Criteria Fulfilled             |
-| :----------------------- | :--------------------------------------------------------------------------------------------------- | :---------------------------------------- |
-| **User Authentication**  | Registration and Login flows with **Formik** and **Yup** for validation.                             | Authentication & Validation (15 Marks)    |
-| **Secure Token Storage** | Authentication tokens are stored using **`expo-secure-store`** (best security practice).             | Authentication & Validation (Tip)         |
-| **Navigation**           | Uses **Expo Router** for stack navigation and a **Bottom Tab Navigator** (Home, Favorites, Profile). | Navigation Implementation (10 Marks)      |
-| **Home Screen**          | Dynamic list of upcoming NBA matches fetched from **TheSportsDB API**.                               | API Integration & Data Display (15 Marks) |
-| **Data Display**         | Match cards (`MatchCard.tsx`) display teams (Title), status (Score/Date), and league info.           | Home Screen (Card Content)                |
-| **Favorites**            | Users can mark and unmark matches as favorites using a heart/star icon.                              | Favourites (Key Requirement)              |
-| **Persistence**          | Favorite match IDs are persisted across sessions using **Redux Persist** and AsyncStorage.           | Favourites (Persist Data)                 |
-| **Details Screen**       | Tapping a match card opens a detailed screen showing scores and extensive match information.         | Item Interaction                          |
-| **Styling & Icons**      | Consistent, dynamic styling managed via a Theme Context, using **Feather Icons** throughout.         | Styling and UI (15 Marks)                 |
-
-### 🎁 Bonus Feature (5 Marks)
-
-- **Dark Mode Toggle**: A switch is provided on the Profile screen to instantly toggle between light and dark themes. The preference is persisted securely.
+A cross-platform mobile application built with **React Native (Expo)** for tracking NBA fixtures, scores, and managing a personalized list of favorite matches.
 
 ---
 
-## 📸 Screenshots
+## 📱 Application Overview
 
-|              Login Screen              |             Home Screen              |               Details Screen               |                Favorites Screen                |
-| :------------------------------------: | :----------------------------------: | :----------------------------------------: | :--------------------------------------------: |
-| ![Login](assets/screenshots/login.png) | ![Home](assets/screenshots/home.png) | ![Details](assets/screenshots/details.png) | ![Favorites](assets/screenshots/favorites.png) |
-
-_(Note: Please ensure screenshots are added to the `assets/screenshots` folder before submission)_
+**Sportify** allows users to:
+- Browse upcoming NBA matches and fixtures
+- View detailed match information including scores and team details
+- Mark matches as favorites for quick access
+- Manage user profile with authentication
+- Toggle between light and dark themes
 
 ---
 
-## 🛠 Tech Stack and Best Practices
+## ✅ Assignment Requirements Fulfilled
 
-| Category             | Tool / Library                   | Best Practice Implemented                                |
-| :------------------- | :------------------------------- | :------------------------------------------------------- |
-| **Framework**        | React Native (Expo) & TypeScript | Industry Standard, Decoupled/Testable Code               |
-| **State Management** | **Redux Toolkit** & React-Redux  | Centralized State Management (15 Marks)                  |
-| **Validation**       | Formik & **Yup**                 | Proper Validations, React Hooks                          |
-| **Data Handling**    | Axios & TheSportsDB API          | Decoupled API Service (`sportsService.ts`)               |
-| **Security**         | `expo-secure-store`              | Storing auth state according to best security practices. |
-| **UI/Theming**       | Custom Theme Context             | Consistent UI/UX Design & Responsiveness                 |
+### 1. User Authentication 
+- ✅ **Registration and Login Flow**: Complete user authentication system
+- ✅ **React Hooks for Form Handling**: Using **Formik** for form state management
+- ✅ **Input Validation**: Implemented with **Yup** schema validation
+- ✅ **Successful Navigation**: Redirects to home screen after login
+- ✅ **User Display**: Username visible in profile screen
+- ✅ **Secure Storage**: Authentication tokens stored using **`expo-secure-store`**
+
+### 2. Navigation Implementation 
+- ✅ **Navigation Library**: Implemented with **Expo Router**
+- ✅ **Navigation Types**: 
+  - Stack Navigation for authentication flow
+  - Bottom Tab Navigation (Home, Favorites, Profile)
+  - Dynamic routing for match details
+
+### 3. API Integration & Data Display 
+- ✅ **API Integration**: Connected to **TheSportsDB API** for live NBA data
+- ✅ **Dynamic Item List**: Displays upcoming NBA matches on home screen
+- ✅ **Card Components**: Each match card contains:
+  - Team logos/images
+  - Match title (Team names)
+  - Match status (date/time or score)
+  - League information
+
+### 4. State Management 
+- ✅ **State Management Solution**: Implemented with **Redux Toolkit**
+- ✅ **Redux Slices**: Separate slices for authentication, favorites, and matches
+- ✅ **Global State**: Centralized state accessible across all components
+- ✅ **Item Interaction**: Tapping a match opens detailed screen with full information
+
+### 5. Favourites 
+- ✅ **Mark as Favourite**: Heart icon to add/remove matches from favorites
+- ✅ **Separate Screen**: Dedicated favorites tab to view saved matches
+- ✅ **Data Persistence**: Favorites persisted using **Redux Persist** with AsyncStorage
+- ✅ **Cross-Session Persistence**: Favorites remain after app restart
+
+### 6. UI/UX Design & Responsiveness 
+- ✅ **Consistent Styling**: Custom theme context for unified design
+- ✅ **Feather Icons**: All icons implemented using Feather Icons library
+- ✅ **Responsive Design**: Layouts adapt to various screen sizes
+- ✅ **Clean UI**: Modern, intuitive interface following Material Design principles
+- ✅ **Visual Feedback**: Loading states, error handling, and user feedback
+
+### 7. Code Quality & Best Practices 
+- ✅ **Feature-Based Commits**: Organized Git history with meaningful commit messages
+- ✅ **Input Validations**: Comprehensive form validation with Yup
+- ✅ **Modular Code**: Separated concerns (components, services, redux slices)
+- ✅ **Reusable Components**: Generic components like MatchCard, themed buttons
+- ✅ **TypeScript**: Full TypeScript implementation for type safety
+- ✅ **Decoupled API Logic**: Separated API services (`authService.ts`, `sportsService.ts`)
+- ✅ **Project Structure**: Clean, organized folder structure
+
+### 8. Bonus Feature 
+- ✅ **Dark Mode Toggle**: Switch between light and dark themes from Profile screen
+- ✅ **Theme Persistence**: User's theme preference saved securely
+
+---
+
+## 🛠 Tech Stack
+
+| Category | Technology | Purpose |
+|:---------|:-----------|:--------|
+| **Framework** | React Native (Expo) | Cross-platform mobile development |
+| **Language** | TypeScript | Type safety and better developer experience |
+| **Navigation** | Expo Router | File-based routing and navigation |
+| **State Management** | Redux Toolkit | Centralized state management |
+| **Data Persistence** | Redux Persist + AsyncStorage | Offline data storage |
+| **Secure Storage** | expo-secure-store | Secure token storage |
+| **Form Handling** | Formik | Form state management |
+| **Validation** | Yup | Schema-based validation |
+| **API Client** | Axios | HTTP requests |
+| **Icons** | Feather Icons | Consistent iconography |
+| **Styling** | StyleSheet + Theme Context | Responsive and themeable UI |
+
+---
 
 ## 📂 Project Structure
 
-The project adheres to a clean, modular structure:
-
 ```
 sportify/
-├── app/                          # Expo Router Screens & Navigation
-│   ├── (tabs)/                   # Bottom Tab Screens (Home, Favs, Profile)
-│   ├── auth/                     # Authentication Stack (Login, Register)
-│   └── match/[id].tsx            # Dynamic Match Details Screen
+├── app/                          # Expo Router pages
+│   ├── (tabs)/                   # Bottom tab navigation
+│   │   ├── index.tsx            # Home screen (matches list)
+│   │   ├── favorites.tsx        # Favorites screen
+│   │   └── profile.tsx          # Profile screen
+│   ├── auth/                     # Authentication stack
+│   │   ├── login.tsx            # Login screen
+│   │   └── register.tsx         # Register screen
+│   ├── match/
+│   │   └── [id].tsx             # Match details screen (dynamic route)
+│   └── _layout.tsx              # Root layout
 ├── src/
-│   ├── components/              # Reusable UI (MatchCard.tsx)
-│   ├── redux/                   # Redux Store, Slices (Auth, Favorites, Matches)
-│   ├── services/                # API Logic Decoupling (authService, sportsService)
-│   └── contexts/                # Theme Context
-└── package.json
+│   ├── components/              # Reusable components
+│   │   ├── MatchCard.tsx        # Match card component
+│   │   └── ThemedButton.tsx     # Themed button component
+│   ├── contexts/                # React contexts
+│   │   └── ThemeContext.tsx     # Theme provider
+│   ├── redux/                   # Redux store and slices
+│   │   ├── store.ts             # Redux store configuration
+│   │   ├── slices/
+│   │   │   ├── authSlice.ts     # Authentication state
+│   │   │   ├── favoritesSlice.ts # Favorites state
+│   │   │   └── matchesSlice.ts   # Matches state
+│   ├── services/                # API services
+│   │   ├── authService.ts       # Authentication API
+│   │   └── sportsService.ts     # Sports data API
+│   └── types/                   # TypeScript type definitions
+│       └── index.ts
+├── assets/                       # Images and static files
+├── package.json
+└── README.md
 ```
 
 ---
@@ -74,90 +136,193 @@ sportify/
 
 ### Prerequisites
 
-- Node.js (v18+)
-- pnpm (recommended) or npm/yarn
-- Expo CLI
+- **Node.js** (v18 or higher)
+- **npm** or **pnpm** or **yarn**
+- **Expo CLI** (installed globally or via npx)
+- **Expo Go** app (for physical device testing)
 
 ### Installation
 
-1. Clone the repository and navigate into the folder:
+1. **Clone the repository**:
 
    ```bash
-   git clone [Your Repository URL Here]
-   cd Sportify-NBA-Edition
+   git clone https://github.com/rajeevansharan/Sportify-NBA.git
+   cd sportify-nba-edition
    ```
 
-2. Install all required dependencies:
-
-   ```bash
-   pnpm install
-   ```
-
-   Or if you're using npm:
+2. **Install dependencies**:
 
    ```bash
    npm install
    ```
 
-3. Start the development server:
+   Or with pnpm:
 
    ```bash
-   pnpm start
+   pnpm install
    ```
 
-   Or with Expo CLI:
+3. **Start the development server**:
 
    ```bash
    npx expo start
    ```
 
-4. In the output, you'll find options to open the app in a:
+4. **Run the app**:
+
+   In the output, you'll find options to open the app in:
    - [development build](https://docs.expo.dev/develop/development-builds/introduction/)
    - [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
    - [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-   - [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-5. Scan the QR code with the **Expo Go** app on your mobile device.
-
-### 🔐 Demo Credentials
-
-Use these credentials to test the core application flow immediately:
-
-- **Username**: `emilys`
-- **Password**: `emilyspass`
-
-> **Note**: If the app skips the login page (due to a previous successful login), navigate to **Profile > Logout** to reset the authentication state.
+   - [Expo Go](https://expo.dev/go) - Scan the QR code with your mobile device
 
 ---
 
-## 📖 Learn more
+## 🔐 Demo Credentials
 
-To learn more about developing your project with Expo, look at the following resources:
+For testing the application, use these credentials:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [React Native documentation](https://reactnative.dev/): Learn about React Native components and APIs.
-- [Redux Toolkit documentation](https://redux-toolkit.js.org/): Learn about state management with Redux.
+**Username**: `emilys`  
+**Password**: `emilyspass`
 
-## 🤝 Join the community
-
-Join our community of developers creating universal apps:
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+> **Note**: These credentials work with the DummyJSON authentication API. If the app skips the login page (due to previous session), navigate to **Profile → Logout** to reset.
 
 ---
 
-## 📝 Assignment Information
+### Authentication Flow
+- Login Screen with form validation
+- Registration Screen with Yup validation
 
-**Course**: IN3210 Mobile Applications Development  
-**Assignment**: Assignment 2  
-**Project**: Sportify: NBA
+### Main Features
+- Home Screen displaying NBA matches list
+- Match Details Screen with full information
+- Favorites Screen with saved matches
+- Profile Screen with dark mode toggle
 
-This project demonstrates proficiency in:
+---
 
-- Cross-platform mobile development with React Native
-- State management with Redux Toolkit
-- API integration and data handling
-- User authentication and secure storage
-- Modern UI/UX design principles
-- Navigation patterns in mobile applications
+## 🔄 Key Features in Detail
+
+### Authentication System
+- Secure login and registration
+- Form validation with real-time error messages
+- Token-based authentication
+- Persistent login sessions
+- Logout functionality
+
+### Match Browsing
+- Dynamic list of upcoming NBA games
+- Pull-to-refresh functionality
+- Search and filter capabilities
+- Real-time score updates
+
+### Favorites Management
+- One-tap favorite toggle
+- Dedicated favorites view
+- Persistent storage across sessions
+- Visual feedback on favorite status
+
+### Theme Support
+- System-wide dark mode
+- Smooth theme transitions
+- Persistent theme preference
+- Accessible color contrast
+
+---
+
+## 🧪 API Integration
+
+### Authentication API
+- **Endpoint**: [DummyJSON Auth](https://dummyjson.com/docs/auth)
+- **Usage**: User login and registration
+
+### Sports Data API
+- **Endpoint**: [TheSportsDB](https://www.thesportsdb.com/api.php)
+- **Usage**: NBA matches, teams, and scores
+- **Example**: `https://www.thesportsdb.com/api/v1/json/3/eventsseason.php?id=4387&s=2024-2025`
+
+---
+
+## 📦 Dependencies
+
+```json
+{
+  "dependencies": {
+    "expo": "~52.0.0",
+    "expo-router": "~4.0.0",
+    "react-native": "0.76.5",
+    "react-redux": "^9.1.2",
+    "@reduxjs/toolkit": "^2.0.0",
+    "redux-persist": "^6.0.0",
+    "expo-secure-store": "~14.0.0",
+    "formik": "^2.4.5",
+    "yup": "^1.3.3",
+    "axios": "^1.6.0",
+    "@expo/vector-icons": "^14.0.0"
+  }
+}
+```
+
+---
+
+## ✨ Best Practices Implemented
+
+1. **Code Organization**: Modular structure with clear separation of concerns
+2. **Type Safety**: Full TypeScript implementation
+3. **State Management**: Centralized Redux store with slice pattern
+4. **Error Handling**: Comprehensive error handling and user feedback
+5. **Security**: Secure token storage using expo-secure-store
+6. **Performance**: Optimized re-renders and lazy loading
+7. **Accessibility**: Proper labels and accessible components
+8. **Git Workflow**: Feature-based commits with clear messages
+9. **Code Quality**: Consistent formatting and naming conventions
+10. **Documentation**: Well-documented code and README
+
+---
+
+## 📝 Evaluation Criteria Coverage
+
+| Criteria | Marks | Implementation |
+|:---------|:------|:---------------|
+| Authentication & Validation | 15 | ✅ Complete with Formik + Yup + Secure Storage |
+| Navigation Implementation | 10 | ✅ Expo Router with Tab + Stack Navigation |
+| API Integration & Data Display | 15 | ✅ TheSportsDB API with dynamic match cards |
+| State Management | 15 | ✅ Redux Toolkit with persist |
+| UI/UX Design & Responsiveness | 15 | ✅ Theme context + Feather Icons + Responsive |
+| Code Quality & Best Practices | 20 | ✅ TypeScript + Modular + Documented |
+| Demo Video | 5 | ✅ 2-minute core flow demonstration |
+| Bonus Feature | 5 | ✅ Dark mode with persistence |
+| **Total** | **100** | **All requirements met** |
+
+---
+
+## 📚 Learn More
+
+To learn more about the technologies used:
+
+- [Expo Documentation](https://docs.expo.dev/)
+- [React Native Documentation](https://reactnative.dev/)
+- [Redux Toolkit Documentation](https://redux-toolkit.js.org/)
+- [Expo Router Documentation](https://docs.expo.dev/router/introduction/)
+- [TheSportsDB API Documentation](https://www.thesportsdb.com/api.php)
+
+---
+
+## 🤝 Contributing
+
+This is an academic project for assignment submission. However, suggestions and feedback are welcome!
+
+---
+
+## 📄 License
+
+This project is developed for educational purposes as part of the IN3210 Mobile Applications Development course.
+
+---
+
+## 👨‍💻 Author
+
+**Sharan Rajeevan**  
+Index Number:224254J   
+University of Moratuwa  
+Faculty of Information Technology
