@@ -15,6 +15,30 @@ export interface Match {
   idHomeTeam: string;
   idAwayTeam: string;
 }
+export interface Team {
+  idTeam: string;
+  strTeam: string;
+  strTeamBadge: string | null;
+  strStadium: string | null;
+  strCountry: string | null;
+}
+export interface MatchSummary {
+  id: string;
+  title: string;         // "Luton Town vs Derby County"
+  league: string;
+  date: string;          // "2024-08-16"
+  time: string;          // "19:00"
+  status: string;        // "Not Started", "Finished", "Match Finished"
+  home: {
+    name: string;
+    score: string | null;
+  };
+  away: {
+    name: string;
+    score: string | null;
+  };
+  thumbnail: string | null;
+}
 
 export interface User {
   token: string;
