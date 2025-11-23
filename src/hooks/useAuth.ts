@@ -1,8 +1,8 @@
 // Feature: User Authentication
 // src/hooks/useAuth.ts
-import { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '@/src/redux/store';
 import { loadUser, setAuthStatus } from '@/src/redux/slices/authSlice';
+import { useAppDispatch, useAppSelector } from '@/src/redux/store';
+import { useEffect, useState } from 'react';
 
 export const useAuth = () => {
   const dispatch = useAppDispatch();

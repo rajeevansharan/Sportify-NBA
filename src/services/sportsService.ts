@@ -1,7 +1,7 @@
 // Feature: Home Screen
 // src/services/sportsService.ts
-import axios from 'axios';
 import { Match } from '@/src/types';
+import axios from 'axios';
 
 // Use API key '3' for existing endpoints, but note: lookuptable may require premium
 const API_BASE_URL = 'https://www.thesportsdb.com/api/v1/json/3';

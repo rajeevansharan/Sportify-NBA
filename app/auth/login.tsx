@@ -8,14 +8,14 @@ import { Formik } from "formik";
 import React, { useState } from "react";
 import {
   Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
 } from "react-native";
 import * as yup from "yup";
 
@@ -66,7 +66,9 @@ export default function LoginScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.headerContainer}>
-          <View style={[styles.logoContainer, { backgroundColor: colors.primary }]}>
+          <View
+            style={[styles.logoContainer, { backgroundColor: colors.primary }]}
+          >
             <Text style={styles.logoText}>🏀</Text>
           </View>
           <Text style={[styles.title, { color: colors.text }]}>
@@ -78,7 +80,9 @@ export default function LoginScreen() {
         </View>
 
         <Formik
-          initialValues={{ username: "emilys", password: "emilyspass" } as LoginValues}
+          initialValues={
+            { username: "emilys", password: "emilyspass" } as LoginValues
+          }
           validationSchema={loginSchema}
           onSubmit={handleLogin}
         >
@@ -99,9 +103,10 @@ export default function LoginScreen() {
                   style={[
                     styles.input,
                     {
-                      borderColor: touched.username && errors.username 
-                        ? "#DC3545" 
-                        : colors.border,
+                      borderColor:
+                        touched.username && errors.username
+                          ? "#DC3545"
+                          : colors.border,
                       color: colors.text,
                       backgroundColor: colors.card,
                     },
@@ -127,9 +132,10 @@ export default function LoginScreen() {
                   style={[
                     styles.input,
                     {
-                      borderColor: touched.password && errors.password 
-                        ? "#DC3545" 
-                        : colors.border,
+                      borderColor:
+                        touched.password && errors.password
+                          ? "#DC3545"
+                          : colors.border,
                       color: colors.text,
                       backgroundColor: colors.card,
                     },
@@ -163,11 +169,21 @@ export default function LoginScreen() {
               </TouchableOpacity>
 
               <View style={styles.divider}>
-                <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
+                <View
+                  style={[
+                    styles.dividerLine,
+                    { backgroundColor: colors.border },
+                  ]}
+                />
                 <Text style={[styles.dividerText, { color: colors.textMuted }]}>
                   OR
                 </Text>
-                <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
+                <View
+                  style={[
+                    styles.dividerLine,
+                    { backgroundColor: colors.border },
+                  ]}
+                />
               </View>
 
               <TouchableOpacity
@@ -175,7 +191,9 @@ export default function LoginScreen() {
                 onPress={() => router.push("/auth/register")}
                 activeOpacity={0.7}
               >
-                <Text style={[styles.registerButtonText, { color: colors.primary }]}>
+                <Text
+                  style={[styles.registerButtonText, { color: colors.primary }]}
+                >
                   Create New Account
                 </Text>
               </TouchableOpacity>
