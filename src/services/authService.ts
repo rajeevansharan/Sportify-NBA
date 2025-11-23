@@ -1,3 +1,4 @@
+// Feature: User Authentication
 // src/services/authService.ts
 
 import { User } from '@/src/types';

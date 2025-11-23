@@ -1,3 +1,4 @@
+// Feature: User Authentication
 // src/redux/slices/authSlice.ts
 import { authService } from '@/src/services/authService';
 import { User } from '@/src/types';

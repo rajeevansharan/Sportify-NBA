@@ -1,3 +1,4 @@
+// Feature: User Authentication
 // src/hooks/useAuth.ts
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/src/redux/store';

@@ -1,3 +1,4 @@
+// Feature: User Authentication
 // app/auth/login.tsx
 import { useTheme } from "@/src/contexts/ThemeContext";
 import { loginUser } from "@/src/redux/slices/authSlice";
