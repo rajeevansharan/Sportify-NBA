@@ -1,3 +1,4 @@
+// Feature: Navigation Structure
 // app/(tabs)/_layout.tsx
 import LoadingSpinner from "@/src/components/LoadingSpinner";
 import { useTheme } from "@/src/contexts/ThemeContext";

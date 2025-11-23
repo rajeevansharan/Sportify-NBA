@@ -1,3 +1,4 @@
+// Feature: Navigation Structure
 // app/_layout.tsx
 import { ThemeProvider } from "@/src/contexts/ThemeContext";
 import { persistor, store } from "@/src/redux/store";
