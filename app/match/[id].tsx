@@ -1,3 +1,4 @@
+// Feature: Details Screen
 // app/match/[id].tsx
 import { useTheme } from "@/src/contexts/ThemeContext";
 import {
