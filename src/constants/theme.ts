@@ -1,3 +1,4 @@
+// Feature: Styling and UI
 // src/constants/theme.ts
 import { ThemeColors } from '@/src/types';
 
