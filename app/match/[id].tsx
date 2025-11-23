@@ -33,6 +33,11 @@ export default function MatchDetailsScreen() {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
+  // Get match from Redux store instead of fetching from API
+  const matchFromStore = useAppSelector((state: RootState) =>
+    state.matches.matches.find((match) => match.idEvent === matchId)
+  );
+
   const isFavorite = useAppSelector((state: RootState) =>
     selectIsFavorite(state, matchId!)
   );
@@ -44,11 +49,29 @@ export default function MatchDetailsScreen() {
   useEffect(() => {
     if (!matchId) return;
 
+    console.log("Match Details Screen - Received ID:", matchId);
+
+    // First try to use the match data from the store
+    if (matchFromStore) {
+      console.log(
+        "Match Details Screen - Using data from store:",
+        matchFromStore
+      );
+      setMatchDetails(matchFromStore);
+      setLoading(false);
+      return;
+    }
+
+    // If not in store, fetch from API as fallback
     const fetchDetails = async () => {
       setLoading(true);
       setError(null);
       try {
         const details = await sportsService.getMatchDetails(matchId);
+        console.log(
+          "Match Details Screen - Fetched details from API:",
+          details
+        );
         setMatchDetails(details);
       } catch (err: any) {
         setError(err.message || "Failed to fetch match details.");
@@ -57,7 +80,7 @@ export default function MatchDetailsScreen() {
       }
     };
     fetchDetails();
-  }, [matchId]);
+  }, [matchId, matchFromStore]);
 
   const handleToggleFavorite = () => {
     if (matchId) {
@@ -276,10 +299,42 @@ export default function MatchDetailsScreen() {
             <InfoRow
               icon="map-pin"
               label="Venue"
-              value="To be announced"
+              value={matchDetails.strVenue || "TBA"}
               colors={colors}
-              isLast
             />
+            {matchDetails.strCity && (
+              <InfoRow
+                icon="navigation"
+                label="Location"
+                value={`${matchDetails.strCity}${matchDetails.strCountry ? `, ${matchDetails.strCountry}` : ""}`}
+                colors={colors}
+              />
+            )}
+            {matchDetails.strSeason && (
+              <InfoRow
+                icon="trending-up"
+                label="Season"
+                value={matchDetails.strSeason}
+                colors={colors}
+              />
+            )}
+            {matchDetails.intRound && (
+              <InfoRow
+                icon="layers"
+                label="Round"
+                value={`Round ${matchDetails.intRound}`}
+                colors={colors}
+              />
+            )}
+            {matchDetails.intSpectators && (
+              <InfoRow
+                icon="users"
+                label="Attendance"
+                value={matchDetails.intSpectators.toLocaleString()}
+                colors={colors}
+                isLast
+              />
+            )}
           </View>
         </View>
       </ScrollView>

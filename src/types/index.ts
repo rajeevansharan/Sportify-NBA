@@ -14,6 +14,12 @@ export interface Match {
   strThumb: string | null; // Placeholder for image/icon
   idHomeTeam: string;
   idAwayTeam: string;
+  strVenue?: string | null; // Venue/Stadium name
+  strCity?: string | null; // City where match is played
+  strCountry?: string | null; // Country
+  strSeason?: string | null; // Season
+  intRound?: string | null; // Round number
+  intSpectators?: string | null; // Number of spectators
 }
 export interface Team {
   idTeam: string;

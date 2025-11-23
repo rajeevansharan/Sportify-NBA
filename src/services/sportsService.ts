@@ -39,6 +39,9 @@ export const sportsService = {
       // TheSportsDB returns the data inside 'events' array
       const events: any[] = response.data.events || [];
       
+      console.log('Fetched events count:', events.length);
+      console.log('Sample event IDs:', events.slice(0, 5).map(e => ({ id: e.idEvent, event: e.strEvent })));
+      
       // Map and clean the data to match the Match interface
       const matches: Match[] = events.map(event => ({
         idEvent: event.idEvent,
@@ -54,6 +57,12 @@ export const sportsService = {
         strThumb: event.strThumb, // Can be null, use fallback in UI
         idHomeTeam: event.idHomeTeam,
         idAwayTeam: event.idAwayTeam,
+        strVenue: event.strVenue,
+        strCity: event.strCity,
+        strCountry: event.strCountry,
+        strSeason: event.strSeason,
+        intRound: event.intRound,
+        intSpectators: event.intSpectators,
       }));
 
       return matches;
@@ -67,8 +76,10 @@ export const sportsService = {
   async getMatchDetails(id: string): Promise<Match> {
     try {
       // Endpoint to lookup a single event
+      console.log('Fetching match details for ID:', id);
       const response = await axios.get(`${API_BASE_URL}/lookupevent.php?id=${id}`);
       
+      console.log('Match details API response:', response.data);
       const event = response.data.events?.[0];
 
       if (!event) throw new Error('Match not found.');
@@ -88,6 +99,12 @@ export const sportsService = {
         strThumb: event.strThumb,
         idHomeTeam: event.idHomeTeam,
         idAwayTeam: event.idAwayTeam,
+        strVenue: event.strVenue,
+        strCity: event.strCity,
+        strCountry: event.strCountry,
+        strSeason: event.strSeason,
+        intRound: event.intRound,
+        intSpectators: event.intSpectators,
       };
 
     } catch (error) {

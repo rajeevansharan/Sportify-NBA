@@ -45,6 +45,12 @@ const MatchCard: React.FC<MatchCardProps> = ({ match }) => {
   };
 
   const handlePress = () => {
+    console.log(
+      "MatchCard pressed - navigating to match ID:",
+      match.idEvent,
+      "Event:",
+      match.strEvent
+    );
     router.push(`/match/${match.idEvent}`);
   };
 

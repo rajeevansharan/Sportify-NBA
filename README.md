@@ -1,6 +1,6 @@
 # 🏀 Sportify: NBA Edition
 
-A cross-platform mobile application built with **React Native (Expo)** for tracking NBA fixtures, scores, and managing a personalized list of favorite matches.
+Sportify: NBA Edition is a mobile app built with React Native that helps users follow NBA basketball games. The NBA is a top professional basketball league in the United States. With Sportify, users can see upcoming matches, check scores and team details, mark favorite games, manage a secure profile, and switch between light and dark themes. The app makes it easy for fans to stay updated on their favorite teams and games.
 
 ---
 
@@ -147,7 +147,7 @@ sportify/
 
    ```bash
    git clone https://github.com/rajeevansharan/Sportify-NBA.git
-   cd sportify-nba-edition
+   cd SportifyNBA
    ```
 
 2. **Install dependencies**:
