@@ -165,7 +165,8 @@ sportify/
 3. **Start the development server**:
 
    ```bash
-   npx expo start
+  npx expo start --tunnel
+
    ```
 
 4. **Run the app**:
