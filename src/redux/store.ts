@@ -1,11 +1,12 @@
+// Feature: State Management
 // src/redux/store.ts
-import { configureStore, combineReducers } from '@reduxjs/toolkit';
-import { persistStore, persistReducer } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import { persistReducer, persistStore } from 'redux-persist';
 import authReducer from './slices/authSlice';
 import favoritesReducer from './slices/favoritesSlice';
 import matchesReducer from './slices/matchesSlice';
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
 // Persist Config
 const persistConfig = {

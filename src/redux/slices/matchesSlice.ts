@@ -1,7 +1,8 @@
+// Feature: State Management
 // src/redux/slices/matchesSlice.ts
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { sportsService } from '@/src/services/sportsService';
 import { Match } from '@/src/types';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface MatchesState {
   matches: Match[];
