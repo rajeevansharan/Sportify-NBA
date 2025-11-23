@@ -1,6 +1,9 @@
 # 🏀 Sportify: NBA Edition
 
-A cross-platform mobile application built with **React Native (Expo)**, focusing on tracking NBA fixtures, scores, and managing a personalized list of favorite matches
+A cross-platform mobile application built with **React Native (Expo)**, focusing on tracking NBA fixtures, scores, and managing a personalized list of favorite matches.
+
+> **Assignment Domain Selection**: Sports & Lifestyle (Last Digit: 4, 9)  
+> **App Theme**: "Sportify" – View matches, players, and scores.
 
 ## 📱 Features Showcase
 
@@ -8,34 +11,44 @@ This application is built with a strong focus on modularity, robust state manage
 
 ### ✅ Core Features (Assignment Requirements)
 
-| Feature | Implementation | Assignment Criteria Fulfilled |
-|:--------|:---------------|:------------------------------|
-| **User Authentication** | Registration and Login flows with **Formik** and **Yup** for validation. | Authentication & Validation (15 Marks) |
-| **Secure Token Storage** | Authentication tokens are stored using **`expo-secure-store`** (best security practice). | Authentication & Validation (Tip) |
-| **Navigation** | Uses **Expo Router** for stack navigation and a **Bottom Tab Navigator** (Home, Favorites, Profile). | Navigation Implementation (10 Marks) |
-| **Home Screen** | Dynamic list of upcoming NBA matches fetched from **TheSportsDB API**. | API Integration & Data Display (15 Marks) |
-| **Data Display** | Match cards (`MatchCard.tsx`) display teams (Title), status (Score/Date), and league info. | Home Screen (Card Content) |
-| **Favorites** | Users can mark and unmark matches as favorites using a heart/star icon. | Favourites (Key Requirement) |
-| **Persistence** | Favorite match IDs are persisted across sessions using **Redux Persist** and AsyncStorage. | Favourites (Persist Data) |
-| **Details Screen** | Tapping a match card opens a detailed screen showing scores and extensive match information. | Item Interaction |
-| **Styling & Icons** | Consistent, dynamic styling managed via a Theme Context, using **Feather Icons** throughout. | Styling and UI (15 Marks) |
+| Feature                  | Implementation                                                                                       | Assignment Criteria Fulfilled             |
+| :----------------------- | :--------------------------------------------------------------------------------------------------- | :---------------------------------------- |
+| **User Authentication**  | Registration and Login flows with **Formik** and **Yup** for validation.                             | Authentication & Validation (15 Marks)    |
+| **Secure Token Storage** | Authentication tokens are stored using **`expo-secure-store`** (best security practice).             | Authentication & Validation (Tip)         |
+| **Navigation**           | Uses **Expo Router** for stack navigation and a **Bottom Tab Navigator** (Home, Favorites, Profile). | Navigation Implementation (10 Marks)      |
+| **Home Screen**          | Dynamic list of upcoming NBA matches fetched from **TheSportsDB API**.                               | API Integration & Data Display (15 Marks) |
+| **Data Display**         | Match cards (`MatchCard.tsx`) display teams (Title), status (Score/Date), and league info.           | Home Screen (Card Content)                |
+| **Favorites**            | Users can mark and unmark matches as favorites using a heart/star icon.                              | Favourites (Key Requirement)              |
+| **Persistence**          | Favorite match IDs are persisted across sessions using **Redux Persist** and AsyncStorage.           | Favourites (Persist Data)                 |
+| **Details Screen**       | Tapping a match card opens a detailed screen showing scores and extensive match information.         | Item Interaction                          |
+| **Styling & Icons**      | Consistent, dynamic styling managed via a Theme Context, using **Feather Icons** throughout.         | Styling and UI (15 Marks)                 |
 
 ### 🎁 Bonus Feature (5 Marks)
 
-* **Dark Mode Toggle**: A switch is provided on the Profile screen to instantly toggle between light and dark themes. The preference is persisted securely.
+- **Dark Mode Toggle**: A switch is provided on the Profile screen to instantly toggle between light and dark themes. The preference is persisted securely.
+
+---
+
+## 📸 Screenshots
+
+|              Login Screen              |             Home Screen              |               Details Screen               |                Favorites Screen                |
+| :------------------------------------: | :----------------------------------: | :----------------------------------------: | :--------------------------------------------: |
+| ![Login](assets/screenshots/login.png) | ![Home](assets/screenshots/home.png) | ![Details](assets/screenshots/details.png) | ![Favorites](assets/screenshots/favorites.png) |
+
+_(Note: Please ensure screenshots are added to the `assets/screenshots` folder before submission)_
 
 ---
 
 ## 🛠 Tech Stack and Best Practices
 
-| Category | Tool / Library | Best Practice Implemented |
-|:---------|:---------------|:--------------------------|
-| **Framework** | React Native (Expo) & TypeScript | Industry Standard, Decoupled/Testable Code |
-| **State Management** | **Redux Toolkit** & React-Redux | Centralized State Management (15 Marks) |
-| **Validation** | Formik & **Yup** | Proper Validations, React Hooks |
-| **Data Handling** | Axios & TheSportsDB API | Decoupled API Service (`sportsService.ts`) |
-| **Security** | `expo-secure-store` | Storing auth state according to best security practices. |
-| **UI/Theming** | Custom Theme Context | Consistent UI/UX Design & Responsiveness |
+| Category             | Tool / Library                   | Best Practice Implemented                                |
+| :------------------- | :------------------------------- | :------------------------------------------------------- |
+| **Framework**        | React Native (Expo) & TypeScript | Industry Standard, Decoupled/Testable Code               |
+| **State Management** | **Redux Toolkit** & React-Redux  | Centralized State Management (15 Marks)                  |
+| **Validation**       | Formik & **Yup**                 | Proper Validations, React Hooks                          |
+| **Data Handling**    | Axios & TheSportsDB API          | Decoupled API Service (`sportsService.ts`)               |
+| **Security**         | `expo-secure-store`              | Storing auth state according to best security practices. |
+| **UI/Theming**       | Custom Theme Context             | Consistent UI/UX Design & Responsiveness                 |
 
 ## 📂 Project Structure
 
@@ -61,9 +74,9 @@ sportify/
 
 ### Prerequisites
 
-* Node.js (v18+)
-* pnpm (recommended) or npm/yarn
-* Expo CLI
+- Node.js (v18+)
+- pnpm (recommended) or npm/yarn
+- Expo CLI
 
 ### Installation
 
@@ -99,7 +112,6 @@ sportify/
    ```
 
 4. In the output, you'll find options to open the app in a:
-
    - [development build](https://docs.expo.dev/develop/development-builds/introduction/)
    - [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
    - [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
@@ -111,8 +123,8 @@ sportify/
 
 Use these credentials to test the core application flow immediately:
 
-* **Username**: `emilys`
-* **Password**: `emilyspass`
+- **Username**: `emilys`
+- **Password**: `emilyspass`
 
 > **Note**: If the app skips the login page (due to a previous successful login), navigate to **Profile > Logout** to reset the authentication state.
 
@@ -139,9 +151,10 @@ Join our community of developers creating universal apps:
 
 **Course**: IN3210 Mobile Applications Development  
 **Assignment**: Assignment 2  
-**Project**: Sportify: NBA 
+**Project**: Sportify: NBA
 
 This project demonstrates proficiency in:
+
 - Cross-platform mobile development with React Native
 - State management with Redux Toolkit
 - API integration and data handling
