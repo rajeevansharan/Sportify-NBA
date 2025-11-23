@@ -1,3 +1,4 @@
+// Feature: Favourites
 // src/redux/slices/favoritesSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 // --- Import RootState from the store ---
